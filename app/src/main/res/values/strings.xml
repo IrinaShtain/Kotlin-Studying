@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">KotlinDemo</string>
+    <string name="clicked_text">You clicked text!</string>
 </resources>
