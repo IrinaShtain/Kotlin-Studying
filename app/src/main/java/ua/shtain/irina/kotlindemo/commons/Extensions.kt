@@ -2,6 +2,8 @@
 
 package ua.shtain.irina.kotlindemo.commons
 
+import android.os.Parcel
+import android.os.Parcelable
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,10 +22,10 @@ fun ViewGroup.inflate(layoutId: Int, attachToRoot: Boolean = false): View {
 
 fun ImageView.loadImg(imageUrl: String) {
     if (TextUtils.isEmpty(imageUrl)) {
-        Log.d("myLog", " +" +imageUrl )
+        Log.d("myLog", " +" + imageUrl)
         Picasso.with(context).load(R.mipmap.ic_launcher).into(this)
     } else {
-        Log.d("myLog", " -" +imageUrl )
+        Log.d("myLog", " -" + imageUrl)
         Picasso.with(context)
                 .load(imageUrl)
                 .placeholder(R.mipmap.ic_launcher)
@@ -31,3 +33,10 @@ fun ImageView.loadImg(imageUrl: String) {
                 .into(this)
     }
 }
+
+inline fun <reified T : Parcelable> createParcel(
+        crossinline createFromParcel: (Parcel) -> T?): Parcelable.Creator<T> =
+        object : Parcelable.Creator<T> {
+            override fun createFromParcel(source: Parcel): T? = createFromParcel(source)
+            override fun newArray(size: Int): Array<out T?> = arrayOfNulls(size)
+        }
