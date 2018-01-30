@@ -13,9 +13,12 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.news_fragment.*
 import ua.shtain.irina.kotlindemo.commons.InfiniteScrollListener
+import ua.shtain.irina.kotlindemo.commons.KotlinDemoApp
 import ua.shtain.irina.kotlindemo.commons.RedditNews
 import ua.shtain.irina.kotlindemo.commons.adapters.NewsAdapter
 import ua.shtain.irina.kotlindemo.commons.inflate
+import javax.inject.Inject
+
 
 /**
  * Created by Irina Shtain on 19.01.2018.
@@ -25,9 +28,15 @@ class NewsFragment : Fragment() {
         private val KEY_REDDIT_NEWS = "redditNews"
     }
 
-    private val newsManager by lazy { NewsManager() }
+    @Inject
+    lateinit var newsManager: NewsManager
     var subscriptions = CompositeDisposable()
     private var redditNews: RedditNews? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        KotlinDemoApp.newsComponent.inject(this)
+    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             container?.inflate(R.layout.news_fragment)
@@ -57,7 +66,7 @@ class NewsFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
              super.onSaveInstanceState(outState)
                 val news = (rvNewsList.adapter as NewsAdapter).getNews()
-               if (redditNews != null && news.size > 0) {
+               if (redditNews != null && news.isNotEmpty()) {
                        outState.putParcelable(KEY_REDDIT_NEWS, redditNews?.copy(news = news))
                   }
          }

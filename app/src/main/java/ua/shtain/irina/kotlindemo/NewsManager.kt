@@ -1,14 +1,17 @@
 package ua.shtain.irina.kotlindemo
 
 import io.reactivex.Observable
-import ua.shtain.irina.kotlindemo.commons.RedditNewsItem
-import ua.shtain.irina.kotlindemo.api.RestAPI
+import ua.shtain.irina.kotlindemo.api.NewsAPI
 import ua.shtain.irina.kotlindemo.commons.RedditNews
+import ua.shtain.irina.kotlindemo.commons.RedditNewsItem
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Created by Irina Shtain on 24.01.2018.
  */
-class NewsManager(private val api: RestAPI = RestAPI()) {
+@Singleton
+class NewsManager @Inject constructor(private val api: NewsAPI) {
 
     fun getNews(after: String, limit: String = "10"): Observable<RedditNews> {
         return Observable.create { subscriber ->
